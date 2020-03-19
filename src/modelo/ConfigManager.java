@@ -7,31 +7,31 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigManager {
-	private String USUARIO;
-	private String PWD;
-	private String URL;
-	private String DRIVER;
+	private String user;
+	private String pwd;
+	private String url;
+	private String driver;
 
 	public ConfigManager() {
-		Properties propiedades = new Properties();
-		InputStream entrada = null;
+		Properties properties = new Properties();
+		InputStream input = null;
 		try {
 			File miFichero = new File("config/dbInfo.ini");
 			if (miFichero.exists()) {
-				entrada = new FileInputStream(miFichero);
-				propiedades.load(entrada);
-				this.USUARIO = propiedades.getProperty("USUARIO");
-				this.PWD = propiedades.getProperty("PWD");
-				this.URL = propiedades.getProperty("URL");
-				this.DRIVER = propiedades.getProperty("DRIVER");
+				input = new FileInputStream(miFichero);
+				properties.load(input);
+				this.user = properties.getProperty("USUARIO");
+				this.pwd = properties.getProperty("PWD");
+				this.url = properties.getProperty("URL");
+				this.driver = properties.getProperty("DRIVER");
 			} else
 				System.err.println("File not found");
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {
-			if (entrada != null) {
+			if (input != null) {
 				try {
-					entrada.close();
+					input.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -39,35 +39,36 @@ public class ConfigManager {
 		}
 	}
 
-	public String getUSUARIO() {
-		return USUARIO;
+	public String getUser() {
+		return user;
 	}
 
-	public void setUSUARIO(String uSUARIO) {
-		USUARIO = uSUARIO;
+	public void setUser(String user) {
+		this.user = user;
 	}
 
-	public String getPWD() {
-		return PWD;
+	public String getPwd() {
+		return pwd;
 	}
 
-	public void setPWD(String pWD) {
-		PWD = pWD;
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
 	}
 
-	public String getURL() {
-		return URL;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setURL(String uRL) {
-		URL = uRL;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
-	public String getDRIVER() {
-		return DRIVER;
+	public String getDriver() {
+		return driver;
 	}
 
-	public void setDRIVER(String dRIVER) {
-		DRIVER = dRIVER;
+	public void setDriver(String driver) {
+		this.driver = driver;
 	}
+
 }

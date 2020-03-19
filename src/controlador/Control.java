@@ -12,16 +12,13 @@ import vista.*;
 
 public class Control {
 	private Vista v;
-	private HashMap<Integer, Elemento> elementos = new HashMap<Integer, Elemento>();
-
 	private DbManager dBManager;
 	private FileManager fileManager;
-	private Connection conexion;
+	private HashMap<Integer, Elemento> elementos = new HashMap<Integer, Elemento>();
 
 	public Control() {
 		dBManager = new DbManager();
 		fileManager = new FileManager();
-		conexion = dBManager.conect();
 	}
 
 	public String showAllDb() throws SQLException {
@@ -31,9 +28,7 @@ public class Control {
 		while (itr.hasNext()) {
 			data += (itr.next().toString()) + "\n";
 		}
-		System.out.println(data);
 		return data;
-
 	}
 
 	public void writeAllFm() throws SQLException, IOException {
@@ -49,7 +44,6 @@ public class Control {
 		while (itr.hasNext()) {
 			data += (itr.next().toString()) + "\n";
 		}
-		System.out.println(data);
 		return data;
 	}
 

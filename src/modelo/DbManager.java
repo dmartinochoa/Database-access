@@ -1,34 +1,37 @@
 package modelo;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Properties;
 
 public class DbManager implements DataInterface {
 	private ConfigManager configManager = new ConfigManager();
-	private String USUARIO = configManager.getUSUARIO();
-	private String PWD = configManager.getPWD();
-	private String URL = configManager.getURL();
-	private String DRIVER = configManager.getDRIVER();
-	private Connection conexion;
+	private String user;
+	private String pwd;
+	private String url;
+	private String driver;
+	private Connection connection;
+
+	public DbManager() {
+		this.user = configManager.getUser();
+		this.pwd = configManager.getPwd();
+		this.url = configManager.getUrl();
+		this.driver = configManager.getDriver();
+		this.connection = conect();
+	}
 
 	public Connection conect() {
 		try {
-			Class.forName(DRIVER);
-			conexion = DriverManager.getConnection(URL, USUARIO, PWD);
+			Class.forName(driver);
+			connection = DriverManager.getConnection(url, user, pwd);
 		} catch (Exception e) {
 			System.out.println("SQL conexion failed");
 			e.printStackTrace();
 		}
-		return conexion;
+		return connection;
 	}
 
 	public HashMap<Integer, Elemento> showAll() {
@@ -36,7 +39,7 @@ public class DbManager implements DataInterface {
 		HashMap<Integer, Elemento> elementos = new HashMap<Integer, Elemento>();
 
 		try {
-			PreparedStatement pstms = conexion.prepareStatement(query);
+			PreparedStatement pstms = connection.prepareStatement(query);
 			ResultSet rs = pstms.executeQuery();
 			while (rs.next()) {
 				int id = rs.getInt("id");
@@ -55,7 +58,7 @@ public class DbManager implements DataInterface {
 	public void addElement(Elemento e) {
 		String query = "insert into elementos(nombre, descripcion, caracteristica) values(?,?,?);";
 		try {
-			PreparedStatement insertPstms = conexion.prepareStatement(query);
+			PreparedStatement insertPstms = connection.prepareStatement(query);
 			insertPstms.setString(1, e.getNombre());
 			insertPstms.setString(2, e.getDescripcion());
 			insertPstms.setString(3, e.getCaracteristicas());

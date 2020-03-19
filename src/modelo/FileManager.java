@@ -58,7 +58,7 @@ public class FileManager implements DataInterface {
 
 	public void addElement(Elemento e) {
 		try {
-			Files.write(Paths.get("file.txt"), (e.toString()+"\n").getBytes(), StandardOpenOption.APPEND);
+			Files.write(Paths.get("file.txt"), (e.toString() + "\n").getBytes(), StandardOpenOption.APPEND);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
