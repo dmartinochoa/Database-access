@@ -148,7 +148,8 @@ public class Vista extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				c.addToFile(c.createFileElement(Integer.parseInt(txtId.getText()), txtNombre.getText(),
 						txtDesc.getText(), txtCara.getText()));
-				txtBox.setText("Entry Written Into File");
+				txtBox.setText("Entry Written Into Db: " + c.createFileElement(Integer.parseInt(txtId.getText()),
+						txtNombre.getText(), txtDesc.getText(), txtCara.getText()).toString());
 			}
 		});
 		btnWriteToFile.setBounds(331, 76, 187, 23);
@@ -159,7 +160,8 @@ public class Vista extends JFrame {
 		btnWriteToDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				c.addToDb(c.createDbElement(txtNombre.getText(), txtDesc.getText(), txtCara.getText()));
-				txtBox.setText("Entry Written Into Db: Nombre:" + txtNombre.getText() + ", Descripcion: " + txtDesc.getText() + ", Caracteristicas: " + txtCara.getText());
+				txtBox.setText("Entry Written Into Db: "
+						+ c.createDbElement(txtNombre.getText(), txtDesc.getText(), txtCara.getText().toString()));
 			}
 		});
 		btnWriteToDb.setBounds(331, 116, 187, 23);
