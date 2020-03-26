@@ -1,7 +1,8 @@
 package vista;
 
 import controlador.*;
-import main.*;
+
+import modelo.Elemento;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,7 +26,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class Vista extends JFrame {
-	private Control c;
+
+	private Control control;
 
 	private int xx, xy; // Position to move window
 	private JLabel lblExit;
@@ -43,9 +45,11 @@ public class Vista extends JFrame {
 	private JLabel lblId;
 	private JLabel lblNombre;
 	private JLabel lblDescripcion;
-	private JLabel lblCara;
+	private JLabel lblCaracteristicas;
 	private JButton btnWriteToDb;
 	private JButton btnWriteToFile;
+	private JButton btnRemoveFromDb;
+	private JButton btnRemoveFromFm;
 
 	public Vista() {
 		setTitle("Acceso a Datos");
@@ -65,26 +69,26 @@ public class Vista extends JFrame {
 
 		txtId = new JTextField();
 		txtId.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		txtId.setBounds(68, 76, 61, 20);
+		txtId.setBounds(55, 76, 48, 20);
 		getContentPane().add(txtId);
 		txtId.setColumns(10);
 
 		txtNombre = new JTextField();
 		txtNombre.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		txtNombre.setColumns(10);
-		txtNombre.setBounds(209, 76, 96, 20);
+		txtNombre.setBounds(168, 76, 94, 20);
 		getContentPane().add(txtNombre);
 
 		txtDesc = new JTextField();
 		txtDesc.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		txtDesc.setColumns(10);
-		txtDesc.setBounds(140, 116, 165, 20);
+		txtDesc.setBounds(128, 107, 134, 20);
 		getContentPane().add(txtDesc);
 
 		txtCara = new JTextField();
 		txtCara.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		txtCara.setColumns(10);
-		txtCara.setBounds(140, 160, 165, 20);
+		txtCara.setBounds(128, 135, 134, 20);
 		getContentPane().add(txtCara);
 
 //Buttons
@@ -92,9 +96,8 @@ public class Vista extends JFrame {
 		btnShowDb = new JButton("Show Dbs");
 		btnShowDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				txtBox.setText("");
 				try {
-					txtBox.setText(c.showAllDb());
+					txtBox.setText(control.showAllDb());
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -107,7 +110,7 @@ public class Vista extends JFrame {
 		btnShowFile = new JButton("Show File Data");
 		btnShowFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				txtBox.setText(c.ShowAllFm());
+				txtBox.setText(control.ShowAllFm());
 			}
 		});
 		btnShowFile.setBounds(170, 25, 125, 23);
@@ -118,12 +121,11 @@ public class Vista extends JFrame {
 		btnDbToFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					c.writeAllFm();
+					control.addDbToFile();
 					txtBox.setText("Db info written into file");
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -135,8 +137,8 @@ public class Vista extends JFrame {
 		btnFileToDb = new JButton("Write File To Db");
 		btnFileToDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				txtBox.setText("Db updated with file data");
-				c.addFileToDb();
+				txtBox.setText("File info written into db");
+				control.addFileToDb();
 			}
 		});
 		btnFileToDb.setBounds(468, 25, 138, 23);
@@ -146,26 +148,61 @@ public class Vista extends JFrame {
 		btnWriteToFile = new JButton("Write Entry To File");
 		btnWriteToFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				c.addToFile(c.createFileElement(Integer.parseInt(txtId.getText()), txtNombre.getText(),
-						txtDesc.getText(), txtCara.getText()));
-				txtBox.setText("Entry Written Into Db: " + c.createFileElement(Integer.parseInt(txtId.getText()),
-						txtNombre.getText(), txtDesc.getText(), txtCara.getText()).toString());
+				Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
+						txtDesc.getText(), txtCara.getText());
+				control.addElementToFile(element);
+				txtBox.setText("Entry Written Into Db: " + element.toString());
 			}
 		});
-		btnWriteToFile.setBounds(331, 76, 187, 23);
+		btnWriteToFile.setBounds(272, 76, 153, 23);
 		getContentPane().add(btnWriteToFile);
 
 		// Write entry to DB
 		btnWriteToDb = new JButton("Write Entry To Db");
 		btnWriteToDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				c.addToDb(c.createDbElement(txtNombre.getText(), txtDesc.getText(), txtCara.getText()));
-				txtBox.setText("Entry Written Into Db: "
-						+ c.createDbElement(txtNombre.getText(), txtDesc.getText(), txtCara.getText().toString()));
+				Elemento element = new Elemento(txtNombre.getText(), txtDesc.getText(), txtCara.getText());
+				control.addElementToDb(element);
+				txtBox.setText("Entry Written Into Db: " + element.toString());
 			}
 		});
-		btnWriteToDb.setBounds(331, 116, 187, 23);
+		btnWriteToDb.setBounds(271, 107, 153, 23);
 		getContentPane().add(btnWriteToDb);
+
+		// Delete all DB
+		btnRemoveFromDb = new JButton("Delete All DB");
+		btnRemoveFromDb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int response = JOptionPane.showConfirmDialog(null, "Do you want to Delete the DB?", "Confirm",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (response == JOptionPane.YES_OPTION) {
+					txtBox.setText("You have deleted the DB, you better have a back up");
+					control.deleteDB();
+				} else {
+					txtBox.setText("You have not deleted the DB");
+				}
+
+			}
+		});
+		btnRemoveFromDb.setBounds(442, 76, 125, 23);
+		getContentPane().add(btnRemoveFromDb);
+
+		// Delete all FM
+		btnRemoveFromFm = new JButton("Delete All File");
+		btnRemoveFromFm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int response = JOptionPane.showConfirmDialog(null, "Do you want to Delete the File?", "Confirm",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (response == JOptionPane.YES_OPTION) {
+					txtBox.setText("You have deleted the File, you better have a back up");
+					control.deleteFM();
+				} else {
+					txtBox.setText("You have not deleted the File");
+				}
+			}
+		});
+		btnRemoveFromFm.setBounds(577, 76, 125, 23);
+		getContentPane().add(btnRemoveFromFm);
 
 //Labels 
 		lblId = new JLabel("Id:");
@@ -175,18 +212,18 @@ public class Vista extends JFrame {
 
 		lblNombre = new JLabel("Nombre:");
 		lblNombre.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		lblNombre.setBounds(151, 79, 48, 14);
+		lblNombre.setBounds(113, 79, 48, 14);
 		getContentPane().add(lblNombre);
 
 		lblDescripcion = new JLabel("Descripcion:");
 		lblDescripcion.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		lblDescripcion.setBounds(35, 119, 94, 14);
+		lblDescripcion.setBounds(35, 107, 94, 14);
 		getContentPane().add(lblDescripcion);
 
-		lblCara = new JLabel("Caracteristicas:");
-		lblCara.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		lblCara.setBounds(35, 163, 94, 14);
-		getContentPane().add(lblCara);
+		lblCaracteristicas = new JLabel("Caracteristicas:");
+		lblCaracteristicas.setFont(new Font("SansSerif", Font.PLAIN, 11));
+		lblCaracteristicas.setBounds(35, 138, 94, 14);
+		getContentPane().add(lblCaracteristicas);
 
 // EXIT
 		lblExit = new JLabel("x");
@@ -216,11 +253,14 @@ public class Vista extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				setState(ICONIFIED);
 			}
+
+			public void mouseEntered(MouseEvent e) {
+				lblMinimize.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			}
 		});
 
 // Listeners para mover la ventana
 		getContentPane().addMouseListener(new MouseAdapter() {
-
 			public void mousePressed(MouseEvent e) {
 				xx = e.getX();
 				xy = e.getY();
@@ -237,12 +277,8 @@ public class Vista extends JFrame {
 		});
 	}
 
-//Setter and getter
-	public Control getC() {
-		return c;
-	}
-
-	public void setC(Control c) {
-		this.c = c;
+//Getter
+	public void setControl(Control control) {
+		this.control = control;
 	}
 }

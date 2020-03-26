@@ -11,29 +11,28 @@ import modelo.*;
 import vista.*;
 
 public class Control {
-	private Vista v;
-	private DbManager dBManager;
+	private Vista vista;
+	private DbManager dbManager;
 	private FileManager fileManager;
 	private HashMap<Integer, Elemento> elementos = new HashMap<Integer, Elemento>();
 
 	public Control() {
-		dBManager = new DbManager();
+		dbManager = new DbManager();
 		fileManager = new FileManager();
+		Vista vista = new Vista();
+		vista.setControl(this);
+		this.setVista(vista);
+		vista.setVisible(true);
 	}
 
 	public String showAllDb() throws SQLException {
 		String data = "";
-		elementos = dBManager.showAll();
+		elementos = dbManager.showAll();
 		Iterator<Elemento> itr = elementos.values().iterator();
 		while (itr.hasNext()) {
 			data += (itr.next().toString()) + "\n";
 		}
 		return data;
-	}
-
-	public void writeAllFm() throws SQLException, IOException {
-		elementos = dBManager.showAll();
-		fileManager.writeAll(elementos);
 	}
 
 	public String ShowAllFm() {
@@ -47,37 +46,33 @@ public class Control {
 		return data;
 	}
 
-	public void addToDb(Elemento e) {
-		dBManager.addElement(e);
-	}
-
-	public void addToFile(Elemento e) {
-		fileManager.addElement(e);
+	public void addDbToFile() throws SQLException, IOException {
+		elementos = dbManager.showAll();
+		fileManager.moveData(elementos);
 	}
 
 	public void addFileToDb() {
 		elementos = fileManager.showAll();
-		Iterator<Elemento> itr = elementos.values().iterator();
-		while (itr.hasNext()) {
-			dBManager.addElement(itr.next());
-		}
+		dbManager.moveData(elementos);
 	}
 
-	public Vista getV() {
-		return v;
+	public void addElementToDb(Elemento e) {
+		dbManager.addElement(e);
 	}
 
-	public void setV(Vista v) {
-		this.v = v;
+	public void addElementToFile(Elemento e) {
+		fileManager.addElement(e);
 	}
 
-	public Elemento createDbElement(String nombre, String descripcion, String caracteristicas) {
-		Elemento e = new Elemento(nombre, descripcion, caracteristicas);
-		return e;
+	public void deleteDB() {
+		dbManager.removeAll();
 	}
 
-	public Elemento createFileElement(int id, String nombre, String descripcion, String caracteristicas) {
-		Elemento e = new Elemento(id, nombre, descripcion, caracteristicas);
-		return e;
+	public void deleteFM() {
+		fileManager.removeAll();
+	}
+
+	public void setVista(Vista vista) {
+		this.vista = vista;
 	}
 }

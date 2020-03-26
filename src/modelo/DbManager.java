@@ -1,11 +1,13 @@
 package modelo;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class DbManager implements DataInterface {
 	private ConfigManager configManager = new ConfigManager();
@@ -67,4 +69,36 @@ public class DbManager implements DataInterface {
 			e1.printStackTrace();
 		}
 	}
+
+	public void moveData(HashMap<Integer, Elemento> e) {
+		Iterator<Elemento> itr = e.values().iterator();
+		while (itr.hasNext()) {
+			addElement(itr.next());
+		}
+	}
+
+	public void removeElement(int id) {
+
+	}
+
+	public void removeAll() {
+		String query = "truncate table elementos";
+		try {
+			PreparedStatement insertPstms = connection.prepareStatement(query);
+			insertPstms.executeUpdate();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	public void modifyElement(int id) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void searchOne(int id) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

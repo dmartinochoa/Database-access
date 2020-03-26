@@ -16,7 +16,7 @@ public class ConfigManager {
 		Properties properties = new Properties();
 		InputStream input = null;
 		try {
-			File miFichero = new File("config/dbInfo.ini");
+			File miFichero = new File("Files/config/dbInfo.ini");
 			if (miFichero.exists()) {
 				input = new FileInputStream(miFichero);
 				properties.load(input);

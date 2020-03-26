@@ -3,6 +3,7 @@ package modelo;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,24 +16,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class FileManager implements DataInterface {
-	File f = new File("file.txt");
+	File f = new File("Files/file.txt");
 	HashMap<Integer, Elemento> elementos = new HashMap<Integer, Elemento>();
 
-	public void writeAll(HashMap<Integer, Elemento> e) throws IOException {
-		FileWriter writer = new FileWriter(f);
-		BufferedWriter bwriter = new BufferedWriter(writer);
-		PrintWriter pwriter = new PrintWriter(bwriter);
-		Iterator<Elemento> itr = e.values().iterator();
-		while (itr.hasNext()) {
-			pwriter.write(itr.next().toString());
-			pwriter.write("\n");
-		}
-		pwriter.close();
-		bwriter.close();
-	}
-
 	public HashMap<Integer, Elemento> showAll() {
-		try (BufferedReader br = new BufferedReader(new FileReader("file.txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader(f))) {
 			StringBuilder sb = new StringBuilder();
 			String line = br.readLine();
 			while (line != null) {
@@ -48,6 +36,7 @@ public class FileManager implements DataInterface {
 				line = br.readLine();
 			}
 			br.close();
+
 			return elementos;
 
 		} catch (IOException e) {
@@ -56,12 +45,59 @@ public class FileManager implements DataInterface {
 		return null;
 	}
 
-	public void addElement(Elemento e) {
+	public void moveData(HashMap<Integer, Elemento> e) {
+		FileWriter writer;
 		try {
-			Files.write(Paths.get("file.txt"), (e.toString() + "\n").getBytes(), StandardOpenOption.APPEND);
+			writer = new FileWriter(f);
+			BufferedWriter bwriter = new BufferedWriter(writer);
+			PrintWriter pwriter = new PrintWriter(bwriter);
+			Iterator<Elemento> itr = e.values().iterator();
+			while (itr.hasNext()) {
+				pwriter.write(itr.next().toString());
+				pwriter.write("\n");
+			}
+			pwriter.close();
+			bwriter.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	public void addElement(Elemento e) {
+		try {
+			Files.write(Paths.get("Files/file.txt"), (e.toString() + "\n").getBytes(), StandardOpenOption.APPEND);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	@Override
+	public void removeElement(int id) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void removeAll() {
+		PrintWriter pw;
+		try {
+			pw = new PrintWriter(f);
+			pw.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void modifyElement(int id) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void searchOne(int id) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
