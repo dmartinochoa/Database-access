@@ -14,6 +14,7 @@ import java.nio.file.StandardOpenOption;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class FileManager implements DataInterface {
 	File f = new File("Files/file.txt");
@@ -88,7 +89,6 @@ public class FileManager implements DataInterface {
 			br.close();
 			if (!f.delete()) {
 				System.out.println("Could not delete file");
-				return;
 			}
 			if (!tempFile.renameTo(f))
 				System.out.println("Could not rename file");
@@ -110,9 +110,35 @@ public class FileManager implements DataInterface {
 
 	@Override
 	public boolean modifyElement(Elemento e) {
-		return false;
-		// TODO Auto-generated method stub
+		boolean todoOK = false;
+		try {
+			File tempFile = new File("Files/temp.txt");
+			BufferedReader br = new BufferedReader(new FileReader(f));
+			PrintWriter pw = new PrintWriter(new FileWriter(tempFile));
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				if (!line.substring(line.indexOf("Id") + 4, line.indexOf("Nombre") - 2)
+						.equals(Integer.toString(e.getId()))) {
+					pw.println(line);
+					pw.flush();
+				} else {
+					pw.println(e.toString());
+					todoOK = true;
+				}
+			}
+			pw.close();
+			br.close();
+			if (!f.delete()) {
+				System.out.println("Could not delete file");
+			}
+			if (!tempFile.renameTo(f)) {
+				System.out.println("Could not rename file");
+			}
 
+		} catch (IOException o) {
+			o.printStackTrace();
+		}
+		return todoOK;
 	}
 
 	@Override

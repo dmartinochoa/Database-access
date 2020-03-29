@@ -99,6 +99,15 @@ public class DbManager implements DataInterface {
 	}
 
 	public boolean modifyElement(Elemento e) {
+		boolean todoOK = false;
+		HashMap<Integer, Elemento> elementos = showAll();
+		Iterator<Elemento> itr = elementos.values().iterator();
+		while (itr.hasNext()) {
+			Elemento a = itr.next();
+			if (e.getId() == a.getId()) {
+				todoOK = true;
+			}
+		}
 		String query = "update elementos set nombre = ?, descripcion = ?, caracteristica = ?  where id = ?";
 		try {
 			PreparedStatement insertPstms = connection.prepareStatement(query);
@@ -109,9 +118,8 @@ public class DbManager implements DataInterface {
 			insertPstms.executeUpdate();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-			return false;
 		}
-		return true;
+		return todoOK;
 	}
 
 	public Elemento searchOne(int id) {

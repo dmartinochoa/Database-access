@@ -109,14 +109,22 @@ public class Control {
 			return "Index does not exist";
 		}
 	}
-	
+
 	public String updateEntryDB(Elemento e) {
 		if (dbManager.modifyElement(e)) {
 			return "Entry modified";
 		} else {
-			return "Couldnt modify element";
+			return "Could not modify element";
 		}
-		
+	}
+
+	public String updateEntryFM(Elemento e) {
+		if (fileManager.modifyElement(e)) {
+			return "Entry modified";
+		} else {
+			return "Could not modify element";
+		}
+
 	}
 
 	public void setVista(Vista vista) {

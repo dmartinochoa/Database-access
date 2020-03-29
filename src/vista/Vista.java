@@ -214,7 +214,7 @@ public class Vista extends JFrame {
 		btnRemoveEntryDb = new JButton("Delete by Id DB");
 		btnRemoveEntryDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (txtId.equals("")) {
+				if (!txtId.getText().equals("")) {
 					txtBox.setText(control.deleteElementDB(Integer.parseInt(txtId.getText())));
 				} else {
 					txtBox.setText("You must enter an id");
@@ -228,7 +228,7 @@ public class Vista extends JFrame {
 		btnRemovEntryFM = new JButton("Delete by Id File");
 		btnRemovEntryFM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (txtId.equals("")) {
+				if (!txtId.getText().equals("")) {
 					txtBox.setText(control.deleteElementFM(Integer.parseInt(txtId.getText())));
 				} else {
 					txtBox.setText("You must enter an id");
@@ -242,7 +242,7 @@ public class Vista extends JFrame {
 		btnShowByIdDB = new JButton("Show by Id DB");
 		btnShowByIdDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (txtId.equals("")) {
+				if (!txtId.getText().equals("")) {
 					txtBox.setText(control.showEntryDB(Integer.parseInt(txtId.getText())));
 				} else {
 					txtBox.setText("You must enter an id");
@@ -256,7 +256,7 @@ public class Vista extends JFrame {
 		btnShowByIdFM = new JButton("Show by Id File");
 		btnShowByIdFM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (txtId.equals("")) {
+				if (!txtId.getText().equals("")) {
 					txtBox.setText(control.showEntryFM(Integer.parseInt(txtId.getText())));
 				} else {
 					txtBox.setText("You must enter an id");
@@ -270,9 +270,13 @@ public class Vista extends JFrame {
 		btnUpdateDB = new JButton("Update by id DB");
 		btnUpdateDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
-						txtDesc.getText(), txtCara.getText());
-				txtBox.setText(control.updateEntryDB(element));
+				if (!txtId.getText().equals("")) {
+					Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
+							txtDesc.getText(), txtCara.getText());
+					txtBox.setText(control.updateEntryDB(element));
+				} else {
+					txtBox.setText("You must enter an id");
+				}
 			}
 		});
 		btnUpdateDB.setBounds(442, 163, 125, 23);
@@ -282,6 +286,13 @@ public class Vista extends JFrame {
 		btnUpdateFM = new JButton("Update by id File");
 		btnUpdateFM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (!txtId.getText().equals("")) {
+					Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
+							txtDesc.getText(), txtCara.getText());
+					txtBox.setText(control.updateEntryFM(element));
+				} else {
+					txtBox.setText("You must enter an id");
+				}
 			}
 		});
 		btnUpdateFM.setBounds(577, 163, 125, 23);
