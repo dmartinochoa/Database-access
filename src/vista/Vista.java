@@ -32,30 +32,6 @@ public class Vista extends JFrame {
 	private int xx, xy; // Position to move window
 	private JLabel lblExit;
 	private JLabel lblMinimize;
-	private JButton btnShowDb;
-	private JTextArea txtBox;
-	private JScrollPane scrollPane;
-	private JButton btnShowFile;
-	private JButton btnDbToFile;
-	private JButton btnFileToDb;
-	private JTextField txtId;
-	private JTextField txtNombre;
-	private JTextField txtDesc;
-	private JTextField txtCara;
-	private JLabel lblId;
-	private JLabel lblNombre;
-	private JLabel lblDescripcion;
-	private JLabel lblCaracteristicas;
-	private JButton btnWriteToDb;
-	private JButton btnWriteToFile;
-	private JButton btnRemoveFromDb;
-	private JButton btnRemoveFromFm;
-	private JButton btnRemoveEntryDb;
-	private JButton btnRemovEntryFM;
-	private JButton btnShowByIdDB;
-	private JButton btnShowByIdFM;
-	private JButton btnUpdateDB;
-	private JButton btnUpdateFM;
 
 	public Vista() {
 		setTitle("Acceso a Datos");
@@ -64,260 +40,6 @@ public class Vista extends JFrame {
 		setUndecorated(true); // Removes border
 		setShape(new RoundRectangle2D.Double(0, 0, 800, 500, 40, 40)); // Border radius
 		getContentPane().setLayout(null);
-
-//Txt		
-		scrollPane = new JScrollPane();
-		scrollPane.setBounds(35, 200, 730, 257);
-		getContentPane().add(scrollPane);
-		txtBox = new JTextArea();
-		txtBox.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		scrollPane.setViewportView(txtBox);
-
-		txtId = new JTextField();
-		txtId.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		txtId.setBounds(55, 76, 48, 20);
-		getContentPane().add(txtId);
-		txtId.setColumns(10);
-
-		txtNombre = new JTextField();
-		txtNombre.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		txtNombre.setColumns(10);
-		txtNombre.setBounds(168, 76, 94, 20);
-		getContentPane().add(txtNombre);
-
-		txtDesc = new JTextField();
-		txtDesc.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		txtDesc.setColumns(10);
-		txtDesc.setBounds(128, 107, 134, 20);
-		getContentPane().add(txtDesc);
-
-		txtCara = new JTextField();
-		txtCara.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		txtCara.setColumns(10);
-		txtCara.setBounds(128, 135, 134, 20);
-		getContentPane().add(txtCara);
-
-//Buttons
-		// Show database
-		btnShowDb = new JButton("Show Dbs");
-		btnShowDb.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					txtBox.setText(control.showAllDb());
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		btnShowDb.setBounds(35, 25, 125, 23);
-		getContentPane().add(btnShowDb);
-
-		// Show file
-		btnShowFile = new JButton("Show File Data");
-		btnShowFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtBox.setText(control.ShowAllFm());
-			}
-		});
-		btnShowFile.setBounds(170, 25, 125, 23);
-		getContentPane().add(btnShowFile);
-
-		// Db to file
-		btnDbToFile = new JButton("Write Db To File");
-		btnDbToFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					control.addDbToFile();
-					txtBox.setText("Db info written into file");
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		btnDbToFile.setBounds(305, 25, 153, 23);
-		getContentPane().add(btnDbToFile);
-
-		// File to db
-		btnFileToDb = new JButton("Write File To Db");
-		btnFileToDb.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtBox.setText("File info written into db");
-				control.addFileToDb();
-			}
-		});
-		btnFileToDb.setBounds(468, 25, 138, 23);
-		getContentPane().add(btnFileToDb);
-
-		// Write entry to File
-		btnWriteToFile = new JButton("Write Entry To File");
-		btnWriteToFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
-						txtDesc.getText(), txtCara.getText());
-				control.addElementToFile(element);
-				txtBox.setText("Entry Written Into Db: " + element.toString());
-			}
-		});
-		btnWriteToFile.setBounds(272, 76, 153, 23);
-		getContentPane().add(btnWriteToFile);
-
-		// Write entry to DB
-		btnWriteToDb = new JButton("Write Entry To Db");
-		btnWriteToDb.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Elemento element = new Elemento(txtNombre.getText(), txtDesc.getText(), txtCara.getText());
-				control.addElementToDb(element);
-				txtBox.setText("Entry Written Into Db: " + element.toString());
-			}
-		});
-		btnWriteToDb.setBounds(271, 107, 153, 23);
-		getContentPane().add(btnWriteToDb);
-
-		// Delete all DB
-		btnRemoveFromDb = new JButton("Delete All DB");
-		btnRemoveFromDb.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int response = JOptionPane.showConfirmDialog(null, "Do you want to Delete the DB?", "Confirm",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-				if (response == JOptionPane.YES_OPTION) {
-					txtBox.setText("You have deleted the DB, you better have a back up");
-					control.deleteDB();
-				} else {
-					txtBox.setText("You have not deleted the DB");
-				}
-
-			}
-		});
-		btnRemoveFromDb.setBounds(442, 76, 125, 23);
-		getContentPane().add(btnRemoveFromDb);
-
-		// Delete all FM
-		btnRemoveFromFm = new JButton("Delete All File");
-		btnRemoveFromFm.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int response = JOptionPane.showConfirmDialog(null, "Do you want to Delete the File?", "Confirm",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-				if (response == JOptionPane.YES_OPTION) {
-					txtBox.setText("You have deleted the File, you better have a back up");
-					control.deleteFM();
-				} else {
-					txtBox.setText("You have not deleted the File");
-				}
-			}
-		});
-		btnRemoveFromFm.setBounds(577, 76, 125, 23);
-		getContentPane().add(btnRemoveFromFm);
-
-		// Remove element DB
-		btnRemoveEntryDb = new JButton("Delete by Id DB");
-		btnRemoveEntryDb.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!txtId.getText().equals("")) {
-					txtBox.setText(control.deleteElementDB(Integer.parseInt(txtId.getText())));
-				} else {
-					txtBox.setText("You must enter an id");
-				}
-			}
-		});
-		btnRemoveEntryDb.setBounds(442, 105, 125, 23);
-		getContentPane().add(btnRemoveEntryDb);
-
-		// Remove elemento File
-		btnRemovEntryFM = new JButton("Delete by Id File");
-		btnRemovEntryFM.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!txtId.getText().equals("")) {
-					txtBox.setText(control.deleteElementFM(Integer.parseInt(txtId.getText())));
-				} else {
-					txtBox.setText("You must enter an id");
-				}
-			}
-		});
-		btnRemovEntryFM.setBounds(577, 105, 125, 23);
-		getContentPane().add(btnRemovEntryFM);
-
-		// Show by id DB
-		btnShowByIdDB = new JButton("Show by Id DB");
-		btnShowByIdDB.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!txtId.getText().equals("")) {
-					txtBox.setText(control.showEntryDB(Integer.parseInt(txtId.getText())));
-				} else {
-					txtBox.setText("You must enter an id");
-				}
-			}
-		});
-		btnShowByIdDB.setBounds(442, 134, 125, 23);
-		getContentPane().add(btnShowByIdDB);
-
-		// Show by id File
-		btnShowByIdFM = new JButton("Show by Id File");
-		btnShowByIdFM.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!txtId.getText().equals("")) {
-					txtBox.setText(control.showEntryFM(Integer.parseInt(txtId.getText())));
-				} else {
-					txtBox.setText("You must enter an id");
-				}
-			}
-		});
-		btnShowByIdFM.setBounds(577, 134, 125, 23);
-		getContentPane().add(btnShowByIdFM);
-
-		// Update element DB
-		btnUpdateDB = new JButton("Update by id DB");
-		btnUpdateDB.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!txtId.getText().equals("")) {
-					Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
-							txtDesc.getText(), txtCara.getText());
-					txtBox.setText(control.updateEntryDB(element));
-				} else {
-					txtBox.setText("You must enter an id");
-				}
-			}
-		});
-		btnUpdateDB.setBounds(442, 163, 125, 23);
-		getContentPane().add(btnUpdateDB);
-
-		// Update element File
-		btnUpdateFM = new JButton("Update by id File");
-		btnUpdateFM.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!txtId.getText().equals("")) {
-					Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
-							txtDesc.getText(), txtCara.getText());
-					txtBox.setText(control.updateEntryFM(element));
-				} else {
-					txtBox.setText("You must enter an id");
-				}
-			}
-		});
-		btnUpdateFM.setBounds(577, 163, 125, 23);
-		getContentPane().add(btnUpdateFM);
-
-//Labels 
-		lblId = new JLabel("Id:");
-		lblId.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		lblId.setBounds(35, 79, 48, 14);
-		getContentPane().add(lblId);
-
-		lblNombre = new JLabel("Nombre:");
-		lblNombre.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		lblNombre.setBounds(113, 79, 48, 14);
-		getContentPane().add(lblNombre);
-
-		lblDescripcion = new JLabel("Descripcion:");
-		lblDescripcion.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		lblDescripcion.setBounds(35, 107, 94, 14);
-		getContentPane().add(lblDescripcion);
-
-		lblCaracteristicas = new JLabel("Caracteristicas:");
-		lblCaracteristicas.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		lblCaracteristicas.setBounds(35, 138, 94, 14);
-		getContentPane().add(lblCaracteristicas);
 
 // EXIT
 		lblExit = new JLabel("x");
@@ -342,6 +64,38 @@ public class Vista extends JFrame {
 		lblMinimize.setFont(new Font("Lucida Sans Unicode", Font.PLAIN, 40));
 		lblMinimize.setBounds(715, 11, 30, 33);
 		getContentPane().add(lblMinimize);
+
+		JButton btnSql = new JButton("SQL View");
+		btnSql.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				control.goToDbView();
+			}
+		});
+		btnSql.setBounds(319, 156, 128, 23);
+		getContentPane().add(btnSql);
+
+		JButton btnFile = new JButton("File View");
+		btnFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				control.goToFileView();
+			}
+		});
+		btnFile.setBounds(319, 190, 128, 23);
+		getContentPane().add(btnFile);
+
+		JButton btnHibernate = new JButton("Hibernate View");
+		btnHibernate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				control.goToHibernateView();
+			}
+		});
+		btnHibernate.setBounds(319, 224, 128, 23);
+		getContentPane().add(btnHibernate);
+
+		JLabel lblTitle = new JLabel("Choose an option:");
+		lblTitle.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblTitle.setBounds(309, 122, 185, 23);
+		getContentPane().add(lblTitle);
 		lblMinimize.addMouseListener(new MouseAdapter() {
 
 			public void mouseClicked(MouseEvent e) {

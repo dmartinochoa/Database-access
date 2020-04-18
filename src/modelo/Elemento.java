@@ -5,6 +5,9 @@ public class Elemento {
 	private String nombre;
 	private String descripcion;
 	private String caracteristicas;
+	
+	public Elemento() {
+	}
 
 	public Elemento(int id, String nombre, String descripcion, String caracteristicas) {
 		this.id = id;

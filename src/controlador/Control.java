@@ -7,22 +7,50 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
 import modelo.*;
 import vista.*;
 
 public class Control {
 	private Vista vista;
+	private VistaFichero vistaFichero;
+	private VistaHibernate vistaHibernate;
+	private VistaSql vistaSql;
 	private DbManager dbManager;
 	private FileManager fileManager;
+	private HibernateManager hibernateManager;
 	private HashMap<Integer, Elemento> elementos = new HashMap<Integer, Elemento>();
 
 	public Control() {
 		dbManager = new DbManager();
 		fileManager = new FileManager();
+		hibernateManager = new HibernateManager();
 		Vista vista = new Vista();
 		vista.setControl(this);
 		this.setVista(vista);
 		vista.setVisible(true);
+	}
+
+	public void goToDbView() {
+		this.vista.dispose();
+		this.vistaSql = new VistaSql();
+		this.vistaSql.setControl(this);
+		this.vistaSql.setVisible(true);
+	}
+
+	public void goToFileView() {
+		this.vista.dispose();
+		this.vistaFichero = new VistaFichero();
+		this.vistaFichero.setControl(this);
+		this.vistaFichero.setVisible(true);
+	}
+
+	public void goToHibernateView() {
+		this.vista.dispose();
+		this.vistaHibernate = new VistaHibernate();
+		this.vistaHibernate.setControl(this);
+		this.vistaHibernate.setVisible(true);
 	}
 
 	public String showAllDb() throws SQLException {
@@ -46,6 +74,17 @@ public class Control {
 		return data;
 	}
 
+	public String ShowAllHibernate() {
+		String data = "";
+		System.out.println();
+		elementos = hibernateManager.showAll();
+		Iterator<Elemento> itr = elementos.values().iterator();
+		while (itr.hasNext()) {
+			data += (itr.next().toString()) + "\n";
+		}
+		return data;
+	}
+
 	public void addDbToFile() throws SQLException, IOException {
 		elementos = dbManager.showAll();
 		fileManager.moveData(elementos);
@@ -56,6 +95,16 @@ public class Control {
 		dbManager.moveData(elementos);
 	}
 
+	public void addDbToFileHibernate() throws SQLException, IOException {
+		elementos = hibernateManager.showAll();
+		fileManager.moveData(elementos);
+	}
+
+	public void addFileToDbHibernate() {
+		elementos = fileManager.showAll();
+		hibernateManager.moveData(elementos);
+	}
+
 	public void addElementToDb(Elemento e) {
 		dbManager.addElement(e);
 	}
@@ -64,12 +113,20 @@ public class Control {
 		fileManager.addElement(e);
 	}
 
+	public void addElementoHibernate(Elemento e) {
+		hibernateManager.addElement(e);
+	}
+
 	public void deleteDB() {
 		dbManager.removeAll();
 	}
 
 	public void deleteFM() {
 		fileManager.removeAll();
+	}
+
+	public void deleteHibernate() {
+		hibernateManager.removeAll();
 	}
 
 	public String deleteElementDB(int id) {
@@ -86,6 +143,16 @@ public class Control {
 		Elemento e = fileManager.searchOne(id);
 		if (e != null) {
 			fileManager.removeElement(id);
+			return "Element with id: " + id + " has been removed";
+		} else {
+			return "Index does not exist";
+		}
+	}
+
+	public String deleteElementHibernate(int id) {
+		Elemento e = hibernateManager.searchOne(id);
+		if (e != null) {
+			hibernateManager.removeElement(id);
 			return "Element with id: " + id + " has been removed";
 		} else {
 			return "Index does not exist";
@@ -110,6 +177,15 @@ public class Control {
 		}
 	}
 
+	public String showEntryHibernate(int id) {
+		Elemento e = hibernateManager.searchOne(id);
+		if (e != null) {
+			return e.toString();
+		} else {
+			return "Index does not exist";
+		}
+	}
+
 	public String updateEntryDB(Elemento e) {
 		if (dbManager.modifyElement(e)) {
 			return "Entry modified";
@@ -124,7 +200,14 @@ public class Control {
 		} else {
 			return "Could not modify element";
 		}
+	}
 
+	public String updateEntryHibernate(Elemento e) {
+		if (hibernateManager.modifyElement(e)) {
+			return "Entry modified";
+		} else {
+			return "Could not modify element";
+		}
 	}
 
 	public void setVista(Vista vista) {
