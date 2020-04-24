@@ -85,10 +85,7 @@ public class HibernateManager implements DataInterface {
 
 	@Override
 	public Elemento searchOne(int id) {
-		Query q = session.createQuery("select e from Elemento e where id=" + id);
-		List results = q.list();
-		Iterator itr = results.iterator();
-		Elemento e = (Elemento) itr.next();
+		Elemento e = (Elemento) session.get(Elemento.class, id);
 		return e;
 	}
 

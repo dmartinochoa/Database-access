@@ -183,7 +183,7 @@ public class VistaHibernate extends JFrame {
 		btnShowByIdDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtId.getText().equals("")) {
-					txtBox.setText(control.showEntryDB(Integer.parseInt(txtId.getText())));
+					txtBox.setText(control.showEntryHibernate(Integer.parseInt(txtId.getText())));
 				} else {
 					txtBox.setText("You must enter an id");
 				}
