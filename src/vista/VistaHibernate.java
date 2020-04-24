@@ -96,7 +96,7 @@ public class VistaHibernate extends JFrame {
 
 //Buttons
 		// Show database
-		btnShowDb = new JButton("Show Dbs");
+		btnShowDb = new JButton("Show Hb");
 		btnShowDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtBox.setText(control.ShowAllHibernate());
@@ -106,7 +106,7 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnShowDb);
 
 		// Db to file
-		btnDbToFile = new JButton("Write Db To File");
+		btnDbToFile = new JButton("Write Hb To File");
 		btnDbToFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -123,7 +123,7 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnDbToFile);
 
 		// File to db
-		btnFileToDb = new JButton("Write File To Db");
+		btnFileToDb = new JButton("Write File To Hb");
 		btnFileToDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtBox.setText("File info written into db");
@@ -134,7 +134,7 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnFileToDb);
 
 		// Write entry to DB
-		btnWriteToDb = new JButton("Write Entry To Db");
+		btnWriteToDb = new JButton("Write Entry To Hb");
 		btnWriteToDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
@@ -147,7 +147,7 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnWriteToDb);
 
 		// Delete all DB
-		btnRemoveFromDb = new JButton("Delete All DB");
+		btnRemoveFromDb = new JButton("Delete All Hb");
 		btnRemoveFromDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int response = JOptionPane.showConfirmDialog(null, "Do you want to Delete the DB?", "Confirm",
@@ -165,7 +165,7 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnRemoveFromDb);
 
 		// Remove element DB
-		btnRemoveEntryDb = new JButton("Delete by Id DB");
+		btnRemoveEntryDb = new JButton("Delete by Id Hb");
 		btnRemoveEntryDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtId.getText().equals("")) {
@@ -179,7 +179,7 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnRemoveEntryDb);
 
 		// Show by id DB
-		btnShowByIdDB = new JButton("Show by Id DB");
+		btnShowByIdDB = new JButton("Show by Id Hb");
 		btnShowByIdDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtId.getText().equals("")) {
@@ -193,7 +193,7 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnShowByIdDB);
 
 		// Update element DB
-		btnUpdateDB = new JButton("Update by id DB");
+		btnUpdateDB = new JButton("Update by id Hb");
 		btnUpdateDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtId.getText().equals("")) {
