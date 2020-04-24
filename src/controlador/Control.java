@@ -23,9 +23,6 @@ public class Control {
 	private HashMap<Integer, Elemento> elementos = new HashMap<Integer, Elemento>();
 
 	public Control() {
-		dbManager = new DbManager();
-		fileManager = new FileManager();
-		hibernateManager = new HibernateManager();
 		Vista vista = new Vista();
 		vista.setControl(this);
 		this.setVista(vista);
@@ -33,6 +30,7 @@ public class Control {
 	}
 
 	public void goToDbView() {
+		dbManager = new DbManager();
 		this.vista.dispose();
 		this.vistaSql = new VistaSql();
 		this.vistaSql.setControl(this);
@@ -40,6 +38,7 @@ public class Control {
 	}
 
 	public void goToFileView() {
+		fileManager = new FileManager();
 		this.vista.dispose();
 		this.vistaFichero = new VistaFichero();
 		this.vistaFichero.setControl(this);
@@ -47,6 +46,7 @@ public class Control {
 	}
 
 	public void goToHibernateView() {
+		hibernateManager = new HibernateManager();
 		this.vista.dispose();
 		this.vistaHibernate = new VistaHibernate();
 		this.vistaHibernate.setControl(this);
@@ -86,22 +86,62 @@ public class Control {
 	}
 
 	public void addDbToFile() throws SQLException, IOException {
+		if (fileManager == null) {
+			fileManager = new FileManager();
+		}
+		if (dbManager == null) {
+			dbManager = new DbManager();
+		}
 		elementos = dbManager.showAll();
 		fileManager.moveData(elementos);
 	}
 
 	public void addFileToDb() {
+		if (fileManager == null) {
+			fileManager = new FileManager();
+		}
+		if (dbManager == null) {
+			dbManager = new DbManager();
+		}
 		elementos = fileManager.showAll();
 		dbManager.moveData(elementos);
 	}
 
 	public void addDbToFileHibernate() throws SQLException, IOException {
+		if (fileManager == null) {
+			fileManager = new FileManager();
+		}
 		elementos = hibernateManager.showAll();
 		fileManager.moveData(elementos);
 	}
 
 	public void addFileToDbHibernate() {
+		if (fileManager == null) {
+			fileManager = new FileManager();
+		}
 		elementos = fileManager.showAll();
+		hibernateManager.moveData(elementos);
+	}
+
+	public void addHibernateToDb() {
+		if (dbManager == null) {
+			dbManager = new DbManager();
+		}
+		if (hibernateManager == null) {
+			hibernateManager = new HibernateManager();
+		}
+		elementos = hibernateManager.showAll();
+		dbManager.moveData(elementos);
+	}
+
+	public void addDbToHibernate() {
+		if (dbManager == null) {
+			dbManager = new DbManager();
+		}
+		if (hibernateManager == null) {
+			hibernateManager = new HibernateManager();
+		}
+		elementos = dbManager.showAll();
 		hibernateManager.moveData(elementos);
 	}
 

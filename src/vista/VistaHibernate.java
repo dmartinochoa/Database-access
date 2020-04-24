@@ -51,6 +51,8 @@ public class VistaHibernate extends JFrame {
 	private JButton btnShowByIdDB;
 	private JButton btnUpdateDB;
 	private JLabel lblTitle;
+	private JButton btnHbToDb;
+	private JButton btnDbToHb;
 
 	public VistaHibernate() {
 		setTitle("Acceso a Datos");
@@ -205,7 +207,29 @@ public class VistaHibernate extends JFrame {
 		});
 		btnUpdateDB.setBounds(577, 104, 125, 23);
 		getContentPane().add(btnUpdateDB);
-
+		
+		//Hibernate to Db
+		btnHbToDb = new JButton("Hibernate To Sql");
+		btnHbToDb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				control.addHibernateToDb();
+				txtBox.setText("Hibernate Data Moved to SQL");
+			}
+		});
+		btnHbToDb.setBounds(35, 166, 125, 23);
+		getContentPane().add(btnHbToDb);
+		
+		//Db to hibernate
+		btnDbToHb = new JButton("Sql To Hibernate");
+		btnDbToHb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				control.addDbToHibernate();
+				txtBox.setText("Db Data Moved To Hibernate Db");
+			}
+		});
+		btnDbToHb.setBounds(169, 166, 125, 23);
+		getContentPane().add(btnDbToHb);
+		
 //Labels 
 		lblId = new JLabel("Id:");
 		lblId.setFont(new Font("SansSerif", Font.PLAIN, 11));
