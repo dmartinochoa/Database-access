@@ -38,6 +38,7 @@ public class DbManager implements DataInterface {
 		return connection;
 	}
 
+	@Override
 	public HashMap<Integer, Elemento> showAll() {
 		String query = "SELECT * FROM elementos";
 		try {
@@ -57,6 +58,7 @@ public class DbManager implements DataInterface {
 		return elementos;
 	}
 
+	@Override
 	public void moveData(HashMap<Integer, Elemento> e) {
 		Iterator<Elemento> itr = e.values().iterator();
 		while (itr.hasNext()) {
@@ -64,6 +66,7 @@ public class DbManager implements DataInterface {
 		}
 	}
 
+	@Override
 	public void addElement(Elemento e) {
 		String query = "insert into elementos(nombre, descripcion, caracteristica) values(?,?,?);";
 		try {
@@ -77,6 +80,7 @@ public class DbManager implements DataInterface {
 		}
 	}
 
+	@Override
 	public void removeElement(int id) {
 		String query = "delete from elementos where id = ?";
 		try {
@@ -88,6 +92,7 @@ public class DbManager implements DataInterface {
 		}
 	}
 
+	@Override
 	public void removeAll() {
 		String query = "truncate table elementos";
 		try {
@@ -98,6 +103,7 @@ public class DbManager implements DataInterface {
 		}
 	}
 
+	@Override
 	public boolean modifyElement(Elemento e) {
 		boolean todoOK = false;
 		HashMap<Integer, Elemento> elementos = showAll();
@@ -122,6 +128,7 @@ public class DbManager implements DataInterface {
 		return todoOK;
 	}
 
+	@Override
 	public Elemento searchOne(int id) {
 		String query = "select * from elementos where id = ?";
 		try {
