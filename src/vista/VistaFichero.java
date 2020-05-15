@@ -97,7 +97,11 @@ public class VistaFichero extends JFrame {
 		btnShowFile = new JButton("Show File Data");
 		btnShowFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				txtBox.setText(control.ShowAllFm());
+				try {
+					txtBox.setText(control.showAll());
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnShowFile.setBounds(35, 25, 125, 23);
@@ -137,7 +141,7 @@ public class VistaFichero extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
 						txtDesc.getText(), txtCara.getText());
-				control.addElementToFile(element);
+				control.addElement(element);
 				txtBox.setText("Entry Written Into Db: " + element.toString());
 			}
 		});
@@ -152,7 +156,7 @@ public class VistaFichero extends JFrame {
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (response == JOptionPane.YES_OPTION) {
 					txtBox.setText("You have deleted the File, you better have a back up");
-					control.deleteFM();
+					control.deleteAll();
 				} else {
 					txtBox.setText("You have not deleted the File");
 				}
@@ -166,7 +170,7 @@ public class VistaFichero extends JFrame {
 		btnRemovEntryFM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtId.getText().equals("")) {
-					txtBox.setText(control.deleteElementFM(Integer.parseInt(txtId.getText())));
+					txtBox.setText(control.deleteElement(Integer.parseInt(txtId.getText())));
 				} else {
 					txtBox.setText("You must enter an id");
 				}
@@ -180,7 +184,7 @@ public class VistaFichero extends JFrame {
 		btnShowByIdFM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtId.getText().equals("")) {
-					txtBox.setText(control.showEntryFM(Integer.parseInt(txtId.getText())));
+					txtBox.setText(control.showEntry(Integer.parseInt(txtId.getText())));
 				} else {
 					txtBox.setText("You must enter an id");
 				}
@@ -196,7 +200,7 @@ public class VistaFichero extends JFrame {
 				if (!txtId.getText().equals("")) {
 					Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
 							txtDesc.getText(), txtCara.getText());
-					txtBox.setText(control.updateEntryFM(element));
+					txtBox.setText(control.updateEntry(element));
 				} else {
 					txtBox.setText("You must enter an id");
 				}

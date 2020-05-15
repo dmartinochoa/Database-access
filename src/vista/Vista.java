@@ -68,7 +68,8 @@ public class Vista extends JFrame {
 		JButton btnSql = new JButton("SQL View");
 		btnSql.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.goToDbView();
+				control.goToView("db");
+
 			}
 		});
 		btnSql.setBounds(319, 156, 128, 23);
@@ -77,7 +78,7 @@ public class Vista extends JFrame {
 		JButton btnFile = new JButton("File View");
 		btnFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.goToFileView();
+				control.goToView("file");
 			}
 		});
 		btnFile.setBounds(319, 190, 128, 23);
@@ -86,7 +87,7 @@ public class Vista extends JFrame {
 		JButton btnHibernate = new JButton("Hibernate View");
 		btnHibernate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.goToHibernateView();
+				control.goToView("hibernate");
 			}
 		});
 		btnHibernate.setBounds(319, 224, 128, 23);
@@ -96,6 +97,15 @@ public class Vista extends JFrame {
 		lblTitle.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblTitle.setBounds(309, 122, 185, 23);
 		getContentPane().add(lblTitle);
+
+		JButton btnJson = new JButton("Json View");
+		btnJson.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				control.goToView("json");
+			}
+		});
+		btnJson.setBounds(319, 258, 128, 23);
+		getContentPane().add(btnJson);
 		lblMinimize.addMouseListener(new MouseAdapter() {
 
 			public void mouseClicked(MouseEvent e) {

@@ -47,9 +47,12 @@ public class HibernateManager implements DataInterface {
 	@Override
 	public void moveData(HashMap<Integer, Elemento> e) {
 		Iterator<Elemento> itr = e.values().iterator();
+		session.beginTransaction();
 		while (itr.hasNext()) {
-			addElement(itr.next());
+			session.saveOrUpdate(itr.next());
 		}
+		session.getTransaction().commit();
+
 	}
 
 	@Override

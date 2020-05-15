@@ -2,3 +2,11 @@ Id: 1, Nombre: Ja Morant, Descripcion: Base fino y elegante, Caracteristicas: Ro
 Id: 2, Nombre: Zion Williamson, Descripcion: Ala Pivot. 130 kg a 100 km/h, Caracteristicas: Rookie
 Id: 3, Nombre: Lebron James, Descripcion: El rey. 15 años y le queda gasolina, Caracteristicas: Veterano
 Id: 4, Nombre: Nikola jokic, Descripcion: Point Center. De todo y todo bien, Caracteristicas: null
+Id: 5, Nombre: Ja Morant, Descripcion: Base fino y elegante, Caracteristicas: Rookie
+Id: 6, Nombre: Zion Williamson, Descripcion: Ala Pivot. 130 kg a 100 km/h, Caracteristicas: Rookie
+Id: 7, Nombre: Lebron James, Descripcion: El rey. 15 años y le queda gasolina, Caracteristicas: Veterano
+Id: 8, Nombre: Nikola jokic, Descripcion: Point Center. De todo y todo bien, Caracteristicas: null
+Id: 9, Nombre: Ja Morant, Descripcion: Base fino y elegante, Caracteristicas: Rookie
+Id: 10, Nombre: Zion Williamson, Descripcion: Ala Pivot. 130 kg a 100 km/h, Caracteristicas: Rookie
+Id: 11, Nombre: Lebron James, Descripcion: El rey. 15 años y le queda gasolina, Caracteristicas: Veterano
+Id: 12, Nombre: Nikola jokic, Descripcion: Point Center. De todo y todo bien, Caracteristicas: null

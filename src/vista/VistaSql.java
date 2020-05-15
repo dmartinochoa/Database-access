@@ -98,7 +98,7 @@ public class VistaSql extends JFrame {
 		btnShowDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					txtBox.setText(control.showAllDb());
+					txtBox.setText(control.showAll());
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -140,7 +140,7 @@ public class VistaSql extends JFrame {
 		btnWriteToDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Elemento element = new Elemento(txtNombre.getText(), txtDesc.getText(), txtCara.getText());
-				control.addElementToDb(element);
+				control.addElement(element);
 				txtBox.setText("Entry Written Into Db: " + element.toString());
 			}
 		});
@@ -155,7 +155,7 @@ public class VistaSql extends JFrame {
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (response == JOptionPane.YES_OPTION) {
 					txtBox.setText("You have deleted the DB, you better have a back up");
-					control.deleteDB();
+					control.deleteAll();
 				} else {
 					txtBox.setText("You have not deleted the DB");
 				}
@@ -170,7 +170,7 @@ public class VistaSql extends JFrame {
 		btnRemoveEntryDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtId.getText().equals("")) {
-					txtBox.setText(control.deleteElementDB(Integer.parseInt(txtId.getText())));
+					txtBox.setText(control.deleteElement(Integer.parseInt(txtId.getText())));
 				} else {
 					txtBox.setText("You must enter an id");
 				}
@@ -184,7 +184,7 @@ public class VistaSql extends JFrame {
 		btnShowByIdDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtId.getText().equals("")) {
-					txtBox.setText(control.showEntryDB(Integer.parseInt(txtId.getText())));
+					txtBox.setText(control.showEntry(Integer.parseInt(txtId.getText())));
 				} else {
 					txtBox.setText("You must enter an id");
 				}
@@ -200,7 +200,7 @@ public class VistaSql extends JFrame {
 				if (!txtId.getText().equals("")) {
 					Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
 							txtDesc.getText(), txtCara.getText());
-					txtBox.setText(control.updateEntryDB(element));
+					txtBox.setText(control.updateEntry(element));
 				} else {
 					txtBox.setText("You must enter an id");
 				}

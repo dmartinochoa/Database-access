@@ -17,10 +17,13 @@ public class Control {
 	private VistaFichero vistaFichero;
 	private VistaHibernate vistaHibernate;
 	private VistaSql vistaSql;
+	private VistaJson vistaJson;
+	private DataInterface i;
 	private DbManager dbManager;
 	private FileManager fileManager;
 	private HibernateManager hibernateManager;
 	private HashMap<Integer, Elemento> elementos = new HashMap<Integer, Elemento>();
+	private String viewName;
 
 	public Control() {
 		Vista vista = new Vista();
@@ -29,55 +32,53 @@ public class Control {
 		vista.setVisible(true);
 	}
 
-	public void goToDbView() {
-		dbManager = new DbManager();
-		this.vista.dispose();
-		this.vistaSql = new VistaSql();
-		this.vistaSql.setControl(this);
-		this.vistaSql.setVisible(true);
-	}
+	public void goToView(String view) {
+		switch (view) {
+		case "db": {
+			viewName = "SQL";
+			i = new DbManager();
+			this.vista.dispose();
+			this.vistaSql = new VistaSql();
+			this.vistaSql.setControl(this);
+			this.vistaSql.setVisible(true);
+			break;
 
-	public void goToFileView() {
-		fileManager = new FileManager();
-		this.vista.dispose();
-		this.vistaFichero = new VistaFichero();
-		this.vistaFichero.setControl(this);
-		this.vistaFichero.setVisible(true);
-	}
-
-	public void goToHibernateView() {
-		hibernateManager = new HibernateManager();
-		this.vista.dispose();
-		this.vistaHibernate = new VistaHibernate();
-		this.vistaHibernate.setControl(this);
-		this.vistaHibernate.setVisible(true);
-	}
-
-	public String showAllDb() throws SQLException {
-		String data = "";
-		elementos = dbManager.showAll();
-		Iterator<Elemento> itr = elementos.values().iterator();
-		while (itr.hasNext()) {
-			data += (itr.next().toString()) + "\n";
 		}
-		return data;
-	}
+		case "file": {
+			viewName = "File";
+			i = new FileManager();
+			this.vista.dispose();
+			this.vistaFichero = new VistaFichero();
+			this.vistaFichero.setControl(this);
+			this.vistaFichero.setVisible(true);
+			break;
 
-	public String ShowAllFm() {
-		String data = "";
-		System.out.println();
-		elementos = fileManager.showAll();
-		Iterator<Elemento> itr = elementos.values().iterator();
-		while (itr.hasNext()) {
-			data += (itr.next().toString()) + "\n";
 		}
-		return data;
+		case "hibernate": {
+			viewName = "Hibernate";
+			i = new HibernateManager();
+			this.vista.dispose();
+			this.vistaHibernate = new VistaHibernate();
+			this.vistaHibernate.setControl(this);
+			this.vistaHibernate.setVisible(true);
+			break;
+
+		}
+		case "json": {
+			viewName = "Json";
+			i = new JsonManager();
+			this.vista.dispose();
+			this.vistaJson = new VistaJson();
+			this.vistaJson.setControl(this);
+			this.vistaJson.setVisible(true);
+			break;
+		}
+		}
 	}
 
-	public String ShowAllHibernate() {
+	public String showAll() throws SQLException {
 		String data = "";
-		System.out.println();
-		elementos = hibernateManager.showAll();
+		elementos = i.showAll();
 		Iterator<Elemento> itr = elementos.values().iterator();
 		while (itr.hasNext()) {
 			data += (itr.next().toString()) + "\n";
@@ -112,7 +113,7 @@ public class Control {
 			fileManager = new FileManager();
 		}
 		elementos = hibernateManager.showAll();
-		fileManager.moveData(elementos);
+		i.moveData(elementos);
 	}
 
 	public void addFileToDbHibernate() {
@@ -120,7 +121,7 @@ public class Control {
 			fileManager = new FileManager();
 		}
 		elementos = fileManager.showAll();
-		hibernateManager.moveData(elementos);
+		i.moveData(elementos);
 	}
 
 	public void addHibernateToDb() {
@@ -131,7 +132,7 @@ public class Control {
 			hibernateManager = new HibernateManager();
 		}
 		elementos = hibernateManager.showAll();
-		dbManager.moveData(elementos);
+		i.moveData(elementos);
 	}
 
 	public void addDbToHibernate() {
@@ -142,35 +143,47 @@ public class Control {
 			hibernateManager = new HibernateManager();
 		}
 		elementos = dbManager.showAll();
-		hibernateManager.moveData(elementos);
+		i.moveData(elementos);
+	}
+	public void addDbToJson() {
+		if (dbManager == null) {
+			dbManager = new DbManager();
+		}
+		elementos = dbManager.showAll();
+		i.moveData(elementos);
+	}
+	public void addJsonToDb() {
+		if (dbManager == null) {
+			dbManager = new DbManager();
+		}
+		elementos = i.showAll();
+		dbManager.moveData(elementos);
+	}
+	public void addJsonToFile() {
+		if (fileManager == null) {
+			fileManager = new FileManager();
+		}
+		elementos = i.showAll();
+		fileManager.moveData(elementos);
+	}
+	public void addFileToJson() {
+		if (fileManager == null) {
+			fileManager = new FileManager();
+		}
+		elementos = fileManager.showAll();
+		i.moveData(elementos);
 	}
 
-	public void addElementToDb(Elemento e) {
-		dbManager.addElement(e);
+	public void addElement(Elemento e) {
+		i.addElement(e);
 	}
 
-	public void addElementToFile(Elemento e) {
-		fileManager.addElement(e);
+	public void deleteAll() {
+		i.removeAll();
 	}
 
-	public void addElementoHibernate(Elemento e) {
-		hibernateManager.addElement(e);
-	}
-
-	public void deleteDB() {
-		dbManager.removeAll();
-	}
-
-	public void deleteFM() {
-		fileManager.removeAll();
-	}
-
-	public void deleteHibernate() {
-		hibernateManager.removeAll();
-	}
-
-	public String deleteElementDB(int id) {
-		Elemento e = dbManager.searchOne(id);
+	public String deleteElement(int id) {
+		Elemento e = i.searchOne(id);
 		if (e != null) {
 			dbManager.removeElement(id);
 			return "Element with id: " + id + " has been removed";
@@ -179,28 +192,8 @@ public class Control {
 		}
 	}
 
-	public String deleteElementFM(int id) {
-		Elemento e = fileManager.searchOne(id);
-		if (e != null) {
-			fileManager.removeElement(id);
-			return "Element with id: " + id + " has been removed";
-		} else {
-			return "Index does not exist";
-		}
-	}
-
-	public String deleteElementHibernate(int id) {
-		Elemento e = hibernateManager.searchOne(id);
-		if (e != null) {
-			hibernateManager.removeElement(id);
-			return "Element with id: " + id + " has been removed";
-		} else {
-			return "Index does not exist";
-		}
-	}
-
-	public String showEntryDB(int id) {
-		Elemento e = dbManager.searchOne(id);
+	public String showEntry(int id) {
+		Elemento e = i.searchOne(id);
 		if (e != null) {
 			return e.toString();
 		} else {
@@ -208,42 +201,8 @@ public class Control {
 		}
 	}
 
-	public String showEntryFM(int id) {
-		Elemento e = fileManager.searchOne(id);
-		if (e != null) {
-			return e.toString();
-		} else {
-			return "Index does not exist";
-		}
-	}
-
-	public String showEntryHibernate(int id) {
-		Elemento e = hibernateManager.searchOne(id);
-		if (e != null) {
-			return e.toString();
-		} else {
-			return "Index does not exist";
-		}
-	}
-
-	public String updateEntryDB(Elemento e) {
-		if (dbManager.modifyElement(e)) {
-			return "Entry modified";
-		} else {
-			return "Could not modify element";
-		}
-	}
-
-	public String updateEntryFM(Elemento e) {
-		if (fileManager.modifyElement(e)) {
-			return "Entry modified";
-		} else {
-			return "Could not modify element";
-		}
-	}
-
-	public String updateEntryHibernate(Elemento e) {
-		if (hibernateManager.modifyElement(e)) {
+	public String updateEntry(Elemento e) {
+		if (i.modifyElement(e)) {
 			return "Entry modified";
 		} else {
 			return "Could not modify element";
@@ -252,5 +211,9 @@ public class Control {
 
 	public void setVista(Vista vista) {
 		this.vista = vista;
+	}
+
+	public String showViewName() {
+		return viewName;
 	}
 }

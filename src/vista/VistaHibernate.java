@@ -32,10 +32,10 @@ public class VistaHibernate extends JFrame {
 	private int xx, xy; // Position to move window
 	private JLabel lblExit;
 	private JLabel lblMinimize;
-	private JButton btnShowDb;
+	private JButton btnShow;
 	private JTextArea txtBox;
 	private JScrollPane scrollPane;
-	private JButton btnDbToFile;
+	private JButton btnDbToJson;
 	private JButton btnFileToDb;
 	private JTextField txtId;
 	private JTextField txtNombre;
@@ -51,8 +51,8 @@ public class VistaHibernate extends JFrame {
 	private JButton btnShowByIdDB;
 	private JButton btnUpdateDB;
 	private JLabel lblTitle;
-	private JButton btnHbToDb;
-	private JButton btnDbToHb;
+	private JButton btnHbToJson;
+	private JButton btnJsonToHb;
 
 	public VistaHibernate() {
 		setTitle("Acceso a Datos");
@@ -96,18 +96,22 @@ public class VistaHibernate extends JFrame {
 
 //Buttons
 		// Show database
-		btnShowDb = new JButton("Show Hb");
-		btnShowDb.addActionListener(new ActionListener() {
+		btnShow = new JButton("show json");
+		btnShow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				txtBox.setText(control.ShowAllHibernate());
+				try {
+					txtBox.setText(control.showAll());
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
-		btnShowDb.setBounds(35, 25, 125, 23);
-		getContentPane().add(btnShowDb);
+		btnShow.setBounds(35, 25, 125, 23);
+		getContentPane().add(btnShow);
 
 		// Db to file
-		btnDbToFile = new JButton("Write Hb To File");
-		btnDbToFile.addActionListener(new ActionListener() {
+		btnDbToJson = new JButton("Write Db to Json");
+		btnDbToJson.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					control.addDbToFileHibernate();
@@ -119,11 +123,11 @@ public class VistaHibernate extends JFrame {
 				}
 			}
 		});
-		btnDbToFile.setBounds(170, 25, 153, 23);
-		getContentPane().add(btnDbToFile);
+		btnDbToJson.setBounds(170, 25, 153, 23);
+		getContentPane().add(btnDbToJson);
 
 		// File to db
-		btnFileToDb = new JButton("Write File To Hb");
+		btnFileToDb = new JButton("Write File To Json");
 		btnFileToDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtBox.setText("File info written into db");
@@ -134,12 +138,12 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnFileToDb);
 
 		// Write entry to DB
-		btnWriteToDb = new JButton("Write Entry To Hb");
+		btnWriteToDb = new JButton("Write Entry To Json");
 		btnWriteToDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
 						txtDesc.getText(), txtCara.getText());
-				control.addElementoHibernate(element);
+				control.addElement(element);
 				txtBox.setText("Entry Written Into Db: " + element.toString());
 			}
 		});
@@ -147,14 +151,14 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnWriteToDb);
 
 		// Delete all DB
-		btnRemoveFromDb = new JButton("Delete All Hb");
+		btnRemoveFromDb = new JButton("Delete All ");
 		btnRemoveFromDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int response = JOptionPane.showConfirmDialog(null, "Do you want to Delete the DB?", "Confirm",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (response == JOptionPane.YES_OPTION) {
 					txtBox.setText("You have deleted the DB, you better have a back up");
-					control.deleteHibernate();
+					control.deleteAll();
 				} else {
 					txtBox.setText("You have not deleted the DB");
 				}
@@ -165,11 +169,11 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnRemoveFromDb);
 
 		// Remove element DB
-		btnRemoveEntryDb = new JButton("Delete by Id Hb");
+		btnRemoveEntryDb = new JButton("Delete by Id");
 		btnRemoveEntryDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtId.getText().equals("")) {
-					txtBox.setText(control.deleteElementHibernate(Integer.parseInt(txtId.getText())));
+					txtBox.setText(control.deleteElement(Integer.parseInt(txtId.getText())));
 				} else {
 					txtBox.setText("You must enter an id");
 				}
@@ -179,11 +183,11 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnRemoveEntryDb);
 
 		// Show by id DB
-		btnShowByIdDB = new JButton("Show by Id Hb");
+		btnShowByIdDB = new JButton("Show by Id");
 		btnShowByIdDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtId.getText().equals("")) {
-					txtBox.setText(control.showEntryHibernate(Integer.parseInt(txtId.getText())));
+					txtBox.setText(control.showEntry(Integer.parseInt(txtId.getText())));
 				} else {
 					txtBox.setText("You must enter an id");
 				}
@@ -193,13 +197,13 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnShowByIdDB);
 
 		// Update element DB
-		btnUpdateDB = new JButton("Update by id Hb");
+		btnUpdateDB = new JButton("Update by id ");
 		btnUpdateDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtId.getText().equals("")) {
 					Elemento element = new Elemento(Integer.parseInt(txtId.getText()), txtNombre.getText(),
 							txtDesc.getText(), txtCara.getText());
-					txtBox.setText(control.updateEntryHibernate(element));
+					txtBox.setText(control.updateEntry(element));
 				} else {
 					txtBox.setText("You must enter an id");
 				}
@@ -209,26 +213,26 @@ public class VistaHibernate extends JFrame {
 		getContentPane().add(btnUpdateDB);
 		
 		//Hibernate to Db
-		btnHbToDb = new JButton("Hibernate To Sql");
-		btnHbToDb.addActionListener(new ActionListener() {
+		btnHbToJson = new JButton("Hibernate To Json");
+		btnHbToJson.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				control.addHibernateToDb();
 				txtBox.setText("Hibernate Data Moved to SQL");
 			}
 		});
-		btnHbToDb.setBounds(35, 166, 125, 23);
-		getContentPane().add(btnHbToDb);
+		btnHbToJson.setBounds(35, 166, 125, 23);
+		getContentPane().add(btnHbToJson);
 		
 		//Db to hibernate
-		btnDbToHb = new JButton("Sql To Hibernate");
-		btnDbToHb.addActionListener(new ActionListener() {
+		btnJsonToHb = new JButton("Json To Hibernate");
+		btnJsonToHb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				control.addDbToHibernate();
 				txtBox.setText("Db Data Moved To Hibernate Db");
 			}
 		});
-		btnDbToHb.setBounds(169, 166, 125, 23);
-		getContentPane().add(btnDbToHb);
+		btnJsonToHb.setBounds(169, 166, 125, 23);
+		getContentPane().add(btnJsonToHb);
 		
 //Labels 
 		lblId = new JLabel("Id:");
@@ -251,7 +255,7 @@ public class VistaHibernate extends JFrame {
 		lblCaracteristicas.setBounds(35, 138, 94, 14);
 		getContentPane().add(lblCaracteristicas);
 
-		lblTitle = new JLabel("Hibernate View");
+		lblTitle = new JLabel("Json View");
 		lblTitle.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblTitle.setBounds(522, 24, 138, 19);
 		getContentPane().add(lblTitle);
