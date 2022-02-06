@@ -3,10 +3,6 @@ package modelo;
 import com.squareup.okhttp.*;
 import java.io.IOException;
 
-/**
- * Created by H3ku on 23/11/15.
- */
-
 public class ApiRequests {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
